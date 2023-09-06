@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Nome do Seu Site" />
+    <meta property="og:description" content="Descrição do Seu Site" />
+    <meta property="og:image" content="imagem/IMG_20230904_233942_416.jpg" />
+    <meta property="og:url" content="https://syntax-play.rf.gd" />
+    <title>Detalhes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <div class="app-details">
+        <div class="app-header">
+            <img src="URL_da_Capa_App1" alt="Capa do Aplicativo" id="app-cover">
+            <div class="app-info">
+                <h1 id="app-name">Nome do Aplicativo</h1>
+                <p id="app-rating">Classificação: 4.5</p>
+                <p id="app-file-size">10MB</p>
+            </div>
+        </div>
+        <div class="buttons">
+            <a href="app-link" class="download-button" id="download-button">Download</a>
+        </div>
+    </div>
+    <div class="app-details">
+        <div class="app-description">
+            <h2>Descrição</h2>
+            <p id="app-description-text">Descrição do aplicativo aqui...</p>
+        </div>
+        <div class="app-screenshots">
+            <h2>Screenshots</h2>
+            <div class="screenshot-images">
+                <div class="horizontal-scroll">
+                    <div class="content">
+                        <img src="URL_da_Imagem1_App1" alt="Imagem 1" id="app-image-1">
+                        <img src="URL_da_Imagem2_App1" alt="Imagem 2" id="app-image-2">
+                        <img src="URL_da_Imagem3_App1" alt="Imagem 3" id="app-image-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app-details">
+        <div class="app-requirements">
+            <h2>Aplicativos</h2>
+        </div>
+        <ul class="horizontal-list" id="app-list">
+        </ul>
+    </div>
+</div>
+
+<script>
+fetch('api.json')
+    .then(response => response.json())
+    .then(data => {
+        const appListUl = document.querySelector('#app-list');
+
+        function displayAppDetails(app) {
+            document.getElementById('app-cover').src = app.Capa;
+            document.getElementById('app-name').textContent = app.Nome;
+            document.getElementById('app-rating').textContent = `Classificação: ${app.Classificação}`;
+            document.getElementById('app-file-size').textContent = ` ${app["Tamanho do Arquivo"]}`;
+            document.getElementById('app-description-text').textContent = app.Descrição;
+            document.getElementById('app-image-1').src = app.Imagem1;
+            document.getElementById('app-image-2').src = app.Imagem2;
+            document.getElementById('app-image-3').src = app.Imagem3;
+            document.getElementById('download-button').href = app.Link;
+        }
+
+        data.forEach(app => {
+            const li = document.createElement('li');
+            const img = document.createElement('img');
+            const nome = document.createElement('p');
+
+            img.src = app.Capa;
+            img.alt = app.Nome;
+            nome.textContent = app.Nome;
+            img.addEventListener('click', () => {
+                displayAppDetails(app);
+            });
+
+            li.appendChild(img);
+            li.appendChild(nome);
+            appListUl.appendChild(li);
+        });
+
+        if (data.length > 0) {
+            displayAppDetails(data[0]);
+        }
+    })
+    .catch(error => console.error('Erro ao carregar o arquivo JSON:', error));
+</script>
+</body>
+</html>
